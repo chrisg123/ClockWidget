@@ -1,5 +1,5 @@
-# pyqt5-clock-widget
-PyQt5 Clock widget
+# ClockWidget
+Clock widget created with pyqt5
 
 ## To run
 Install PyQt5 then:
