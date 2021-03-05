@@ -1,14 +1,33 @@
+import datetime
 from math import sin,cos,pi
 from PyQt5.QtWidgets import QWidget
-from PyQt5.QtCore import Qt, QSize, QPointF
+from PyQt5.QtCore import Qt, QSize, QPointF, QTimer
 from PyQt5.QtGui import QPainter, QBrush, QPen, QColor
 
 class ClockWidget(QWidget):
-    def __init__(self, size: QSize=None, frame_ratio=0.1):
-        super().__init__()
-        if size is None: size = QSize(300,300)
-        self.setFixedSize(size)
+    def __init__(self, parent, size: QSize=None, frame_ratio=0.1):
+        super().__init__(parent)
 
+        if size is None: size = QSize(300,300)
+        self.update_size(size, frame_ratio)
+        self._bgcolor = Qt.white
+        self._fgcolor= Qt.black
+        self._hr_hand_color = Qt.black
+        self._min_hand_color = Qt.black
+        self._sec_hand_color = Qt.black
+
+        now = datetime.datetime.now()
+        self.set_time(now.hour, now.minute, now.second)
+        timer = QTimer(self)
+        timer.timeout.connect(self._tick)
+        timer.start(1000)
+
+    def _tick(self):
+        now = datetime.datetime.now()
+        self.set_time(now.hour, now.minute, now.second)
+
+    def update_size(self, size: QSize, frame_ratio=0.1):
+        self.setFixedSize(size)
         self._center = QPointF(self.width() / 2.0, self.height() / 2.0)
         self._radius = (min(self.width(), self.height()) * 0.9) / 2
         self._frame_width = self._radius * frame_ratio
@@ -28,11 +47,6 @@ class ClockWidget(QWidget):
 
         self._hr_line_length = self._inner_radius * 0.10
 
-        self._bgcolor = Qt.white
-        self._fgcolor= Qt.black
-        self._hr_hand_color = Qt.black
-        self._min_hand_color = Qt.black
-        self._sec_hand_color = Qt.black
 
     def set_background_color(self, color: QColor):
         self._bgcolor = color
