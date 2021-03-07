@@ -20,7 +20,7 @@ def main():
     window.setLayout(layout)
     window.setFixedSize(QSize(400, 800))
 
-    clock = ClockWidget(window.size(), 0.1)
+    clock = ClockWidget(window, window.size(), 0.1)
     now = datetime.datetime.now()
     clock.set_time(now.hour, now.minute, now.second)
 
